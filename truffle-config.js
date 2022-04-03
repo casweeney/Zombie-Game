@@ -19,6 +19,8 @@
  */
 
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require("truffle-hdwallet-provider");
+const mnemonic = "YOUR MNEMONIC HERE";
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
@@ -41,11 +43,37 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    // development: {
-    //  host: "127.0.0.1",     // Localhost (default: none)
-    //  port: 8545,            // Standard Ethereum port (default: none)
-    //  network_id: "*",       // Any network (default: none)
-    // },
+    development: {
+     host: "127.0.0.1",     // Localhost (default: none)
+     port: 8545,            // Standard Ethereum port (default: none)
+     network_id: "*",       // Any network (default: none)
+    },
+    mainnet: {
+      provider: function() {
+          return new HDWalletProvider(mnemonic, "https://mainnet.infura.io/v3/<YOUR_INFURA_API_KEY>")
+      },
+      network_id: "1"
+    },
+ 
+    rinkeby: {
+      provider: function() {
+          return new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/<YOUR_INFURA_API_KEY>")
+      },
+      network_id: 4
+    },
+ 
+    loom_testnet: {
+      provider: function() {
+          const privateKey = 'YOUR_PRIVATE_KEY';
+          const chainId = 'extdev-plasma-us1';
+          const writeUrl = 'wss://extdev-basechain-us1.dappchains.com/websocket';
+          const readUrl = 'wss://extdev-basechain-us1.dappchains.com/queryws';
+          const loomTruffleProvider = new LoomTruffleProvider(chainId, writeUrl, readUrl, privateKey);
+          loomTruffleProvider.createExtraAccountsFromMnemonic(mnemonic, 10);
+          return loomTruffleProvider;
+      },
+      network_id: '9545242630824'
+    }
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -81,7 +109,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.8.9",    // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.4.25",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {

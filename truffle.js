@@ -37,7 +37,19 @@ module.exports = {
                 return loomTruffleProvider;
             },
             network_id: '9545242630824'
-        }
+        },
+        basechain: {
+            provider: function() {
+              const chainId = 'default';
+              const writeUrl = 'http://basechain.dappchains.com/rpc';
+              const readUrl = 'http://basechain.dappchains.com/query';
+              return new LoomTruffleProvider(chainId, writeUrl, readUrl, privateKey);
+              const privateKeyPath = path.join(__dirname, 'mainnet_private_key');
+              const loomTruffleProvider = getLoomProviderWithPrivateKey(privateKeyPath, chainId, writeUrl, readUrl);
+              return loomTruffleProvider;
+              },
+            network_id: '*'
+          }
     },
     compilers: {
         solc: {
